@@ -43,7 +43,7 @@ export default function App() {
   return (
     <div className="relative isolate min-h-screen bg-slate-50">
       <GraphBackground />
-      <header className="relative z-10 border-b border-slate-200 bg-white">
+      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-6 py-3">
           <a
             href="/"
