@@ -1,30 +1,63 @@
-type AlgorithmPreviewProps = {
-  data: number[];
+import {
+  useEffect,
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
+import type { PreviewStep } from "../types/preview";
+
+function subscribeToMotionPreference(onChange: () => void) {
+  const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
+function getMotionPreference() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+type AlgorithmPreviewProps<Step extends PreviewStep> = {
+  steps: readonly Step[];
+  renderStep: (step: Step) => ReactNode;
+  stepDuration?: number;
+  endDuration?: number;
 };
 
-export function AlgorithmPreview({ data }: AlgorithmPreviewProps) {
-  const maxValue = Math.max(1, ...data);
+export function AlgorithmPreview<Step extends PreviewStep>({
+  steps,
+  renderStep,
+  stepDuration = 1200,
+  endDuration = 2400,
+}: AlgorithmPreviewProps<Step>) {
+  const [stepIndex, setStepIndex] = useState(0);
+  const reducedMotion = useSyncExternalStore(
+    subscribeToMotionPreference,
+    getMotionPreference,
+    () => true,
+  );
+  const stepCount = steps.length;
+  const currentIndex = stepCount > 0 ? stepIndex % stepCount : 0;
+
+  useEffect(() => {
+    if (reducedMotion || stepCount < 2) return;
+    const timer = window.setTimeout(
+      () => setStepIndex((previous) => (previous + 1) % stepCount),
+      currentIndex === stepCount - 1 ? endDuration : stepDuration,
+    );
+    return () => window.clearTimeout(timer);
+  }, [reducedMotion, currentIndex, stepCount, stepDuration, endDuration]);
+
+  const step = steps[currentIndex];
+  if (!step) return null;
 
   return (
-    <figure className="rounded-lg bg-slate-50 p-4">
-      <figcaption className="text-sm text-slate-600">Unsorted input</figcaption>
-      <ol className="flex h-40 items-end justify-center gap-2">
-        {data.map((value, index) => (
-          <li
-            key={index}
-            className="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-2"
-          >
-            <div
-              aria-hidden="true"
-              className="w-full max-w-10 rounded-t-md bg-blue-600"
-              style={{ height: `${(value / maxValue) * 112}px` }}
-            />
-            <span className="text-xs font-medium text-slate-600 tabular-nums">
-              {value}
-            </span>
-          </li>
-        ))}
-      </ol>
-    </figure>
+    <>
+      <div className="mb-3">
+        <span className="text-xs font-medium text-slate-600">
+          {step.phase} · {currentIndex + 1} / {stepCount}
+        </span>
+      </div>
+      {renderStep(step)}
+    </>
   );
 }

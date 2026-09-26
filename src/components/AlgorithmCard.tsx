@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import {
   Card,
   CardContent,
@@ -7,29 +8,30 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Button } from "./ui/button";
-import { AlgorithmPreview } from "./AlgorithmPreview";
 
 type AlgorithmCardProps = {
   title: string;
   description: string;
-  previewData: number[];
+  preview: ReactNode;
 };
 
 export function AlgorithmCard({
   title,
   description,
-  previewData,
+  preview,
 }: AlgorithmCardProps) {
   return (
-    <Card className="w-full">
+    <Card className="w-full" size="sm">
       <CardHeader>
         <CardTitle>
           <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
         </CardTitle>
-        <CardDescription className="leading-relaxed">{description}</CardDescription>
+        <CardDescription className="leading-relaxed">
+          {description}
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <AlgorithmPreview data={previewData} />
+        <div className="rounded-lg bg-slate-50 p-3">{preview}</div>
       </CardContent>
       <CardFooter>
         <Button className="h-11 w-full bg-blue-700 text-white hover:bg-blue-800">
