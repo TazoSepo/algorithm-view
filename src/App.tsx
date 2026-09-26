@@ -45,9 +45,16 @@ export default function App() {
       <GraphBackground />
       <header className="relative z-10 border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-6 py-3">
-          <span className="text-xl font-semibold text-blue-950">
-            Algorithm Visuals
-          </span>
+          <a
+            href="/"
+            className="shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
+          >
+            <img
+              src="/brand/algorithm-visuals-logo.png"
+              alt="Algorithm Visuals home"
+              className="h-10 w-52 object-cover sm:w-64"
+            />
+          </a>
           <a
             target="_blank"
             rel="noopener noreferrer"
