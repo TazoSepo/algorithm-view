@@ -1,15 +1,44 @@
+import { useState } from "react";
 import { AlgorithmCard } from "./components/AlgorithmCard";
 import { MergeSortPreview } from "./components/previews/MergeSortPreview";
+import { Input } from "./components/ui/input";
 
 const algorithmCards = [
   <AlgorithmCard
+    key="merge-sort"
     title="Merge sort"
+    description="Merge sort divides a list into smaller parts, sorts them, and merges them back into one ordered list."
+    preview={<MergeSortPreview />}
+  />,
+  <AlgorithmCard
+    key="bubble-sort"
+    title="Bubble sort"
+    description="Merge sort divides a list into smaller parts, sorts them, and merges them back into one ordered list."
+    preview={<MergeSortPreview />}
+  />,
+  <AlgorithmCard
+    key="select-sort"
+    title="Select sort"
+    description="Merge sort divides a list into smaller parts, sorts them, and merges them back into one ordered list."
+    preview={<MergeSortPreview />}
+  />,
+  <AlgorithmCard
+    key="quick-sort"
+    title="Quick sort"
+    description="Merge sort divides a list into smaller parts, sorts them, and merges them back into one ordered list."
+    preview={<MergeSortPreview />}
+  />,
+  <AlgorithmCard
+    key="quick-bort"
+    title="Quick bort"
     description="Merge sort divides a list into smaller parts, sorts them, and merges them back into one ordered list."
     preview={<MergeSortPreview />}
   />,
 ];
 
 export default function App() {
+  const [searchString, setSearchString] = useState("");
+
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="border-b border-slate-200 bg-white">
@@ -37,8 +66,25 @@ export default function App() {
             algorithms to life, making complex operations intuitive through
             step-by-step execution.
           </p>
-          <div className="mt-6 w-full max-w-md">
+          <Input
+            type="text"
+            className="max-w-xl mt-4"
+            placeholder="What are you looking for?"
+            value={searchString}
+            onChange={(e) => {
+              setSearchString(e.target.value);
+            }}
+          ></Input>
+          <div className="mt-6 flex w-full flex-wrap justify-center gap-6">
             {algorithmCards.map((card) => {
+              const matches = card.props.title
+                .toLowerCase()
+                .includes(searchString.trim().toLowerCase());
+
+              if (!matches) {
+                return null;
+              }
+
               return card;
             })}
           </div>

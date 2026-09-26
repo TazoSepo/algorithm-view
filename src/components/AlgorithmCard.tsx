@@ -21,7 +21,7 @@ export function AlgorithmCard({
   preview,
 }: AlgorithmCardProps) {
   return (
-    <Card className="w-full" size="sm">
+    <Card className="w-full min-w-0 lg:w-[calc((100%-3rem)/3)]" size="sm">
       <CardHeader>
         <CardTitle>
           <h2 className="text-xl font-semibold text-slate-900">{title}</h2>
