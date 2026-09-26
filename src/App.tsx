@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AlgorithmCard } from "./components/AlgorithmCard";
 import { MergeSortPreview } from "./components/previews/MergeSortPreview";
 import { Input } from "./components/ui/input";
+import { GraphBackground } from "./components/GraphBackground";
 
 const algorithmCards = [
   <AlgorithmCard
@@ -40,8 +41,9 @@ export default function App() {
   const [searchString, setSearchString] = useState("");
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="border-b border-slate-200 bg-white">
+    <div className="relative isolate min-h-screen bg-slate-50">
+      <GraphBackground />
+      <header className="relative z-10 border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-6 py-3">
           <span className="text-xl font-semibold text-blue-950">
             Algorithm Visuals
@@ -56,7 +58,7 @@ export default function App() {
           </a>
         </div>
       </header>
-      <main className="py-4">
+      <main className="relative z-10 py-4">
         <div className="mx-auto flex max-w-5xl flex-col items-center px-6">
           <h1 className="max-w-4xl text-center text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
             Explore algorithms, one step at a time.

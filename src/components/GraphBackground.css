@@ -1,0 +1,47 @@
+.graph-background-pulse {
+  animation: graph-background-traverse 24s linear infinite;
+}
+
+.graph-background-glow {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: graph-background-breathe 9s ease-in-out infinite;
+}
+
+@keyframes graph-background-breathe {
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 0.9;
+  }
+}
+
+@keyframes graph-background-traverse {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+  8%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .graph-background-glow {
+    animation: none;
+  }
+
+  .graph-background-pulse {
+    animation: none;
+    display: none;
+  }
+}
