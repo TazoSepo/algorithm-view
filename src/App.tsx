@@ -1,60 +1,38 @@
-import { useState } from "react";
-import { AlgorithmCard } from "./components/AlgorithmCard";
-import { MergeSortPreview } from "./components/previews/MergeSortPreview";
-import { Input } from "./components/ui/input";
+import { useEffect } from "react";
+import {
+  BrowserRouter,
+  Link,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router";
 import { GraphBackground } from "./components/GraphBackground";
+import { AlgorithmListPage } from "./pages/AlgorithmListPage";
+import { AlgorithmDetailPage } from "./pages/AlgorithmDetailPage";
+import { NotFoundPage } from "./pages/NotFoundPage";
 
-const algorithmCards = [
-  <AlgorithmCard
-    key="merge-sort"
-    title="Merge sort"
-    description="Merge sort divides a list into smaller parts, sorts them, and merges them back into one ordered list."
-    preview={<MergeSortPreview />}
-  />,
-  <AlgorithmCard
-    key="bubble-sort"
-    title="Bubble sort"
-    description="Merge sort divides a list into smaller parts, sorts them, and merges them back into one ordered list."
-    preview={<MergeSortPreview />}
-  />,
-  <AlgorithmCard
-    key="select-sort"
-    title="Select sort"
-    description="Merge sort divides a list into smaller parts, sorts them, and merges them back into one ordered list."
-    preview={<MergeSortPreview />}
-  />,
-  <AlgorithmCard
-    key="quick-sort"
-    title="Quick sort"
-    description="Merge sort divides a list into smaller parts, sorts them, and merges them back into one ordered list."
-    preview={<MergeSortPreview />}
-  />,
-  <AlgorithmCard
-    key="quick-bort"
-    title="Quick bort"
-    description="Merge sort divides a list into smaller parts, sorts them, and merges them back into one ordered list."
-    preview={<MergeSortPreview />}
-  />,
-];
-
-export default function App() {
-  const [searchString, setSearchString] = useState("");
+function AppLayout() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <div className="relative isolate min-h-screen bg-slate-50">
       <GraphBackground />
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-6 py-3">
-          <a
-            href="/"
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-3">
+          <Link
+            to="/"
             className="shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
           >
             <img
-              src="/brand/algorithm-visuals-logo.png"
+              src={`${import.meta.env.BASE_URL}brand/algorithm-visuals-logo.png`}
               alt="Algorithm Visuals home"
               className="h-10 w-52 object-cover sm:w-64"
             />
-          </a>
+          </Link>
           <a
             target="_blank"
             rel="noopener noreferrer"
@@ -65,40 +43,26 @@ export default function App() {
           </a>
         </div>
       </header>
-      <main className="relative z-10 py-4">
-        <div className="mx-auto flex max-w-5xl flex-col items-center px-6">
-          <h1 className="max-w-4xl text-center text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-            Explore algorithms, one step at a time.
-          </h1>
-          <p className="mt-3 max-w-3xl text-center text-base leading-relaxed text-slate-600">
-            An interactive visualization tool that brings data structures and
-            algorithms to life, making complex operations intuitive through
-            step-by-step execution.
-          </p>
-          <Input
-            type="text"
-            className="max-w-xl mt-4"
-            placeholder="What are you looking for?"
-            value={searchString}
-            onChange={(e) => {
-              setSearchString(e.target.value);
-            }}
-          ></Input>
-          <div className="mt-6 flex w-full flex-wrap justify-center gap-6">
-            {algorithmCards.map((card) => {
-              const matches = card.props.title
-                .toLowerCase()
-                .includes(searchString.trim().toLowerCase());
-
-              if (!matches) {
-                return null;
-              }
-
-              return card;
-            })}
-          </div>
-        </div>
+      <main id="main-content" tabIndex={-1} className="relative z-10">
+        <Outlet />
       </main>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route index element={<AlgorithmListPage />} />
+          <Route
+            path="algorithms/:algorithmId"
+            element={<AlgorithmDetailPage />}
+          />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
